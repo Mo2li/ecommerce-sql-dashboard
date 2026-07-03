@@ -25,6 +25,20 @@ Customers split into **Champions / Loyal-at-risk / Recent / Cooling down / Lost*
 
 ---
 
+## 🗄️ Data Model & SQL Pipeline
+
+**Star-schema model** — two fact views (`vw_fact_orders`, `vw_fact_order_items`) and a customer dimension (`vw_customer_rfm`), all connected to a dedicated `Date` table for time intelligence.
+
+![Data Model](images/04_data_model.png)
+
+**Data flows from SQL Server → Power BI (Import mode):**
+
+| SQL Server connection | Live query with results |
+|---|---|
+| ![SQL connection](images/05_powerbi_sql_connection.png) | ![SQL query](images/06_sql_query_result.png) |
+
+---
+
 ## 🔑 Key Insights
 
 | # | Finding |
