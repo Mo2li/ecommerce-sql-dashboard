@@ -11,13 +11,17 @@ An end-to-end analytics project on the **Brazilian E-Commerce (Olist)** dataset:
 ### 1. Revenue Overview
 KPIs (Total Revenue, Orders, AOV, MoM growth) · monthly revenue trend · top 10 product categories · year slicer.
 
+![Revenue Overview](images/01_revenue_overview.png)
+
 ### 2. Delivery & Satisfaction
 Avg delivery days · late-delivery % · avg review score · delivery time by state · **review score vs late-delivery %** (the key insight).
+
+![Delivery & Satisfaction](images/02_delivery_satisfaction.png)
 
 ### 3. Customer Segmentation (RFM)
 Customers split into **Champions / Loyal-at-risk / Recent / Cooling down / Lost** using Recency-Frequency-Monetary logic, with a donut chart and a per-segment spend table.
 
-> Screenshots are in the [`/images`](images) folder.
+![Customer Segmentation](images/03_customer_segmentation.png)
 
 ---
 
