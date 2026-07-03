@@ -1,46 +1,30 @@
-=====================================================
-DAX Measures — انسخ والصق واحدة واحدة
-(كليك يمين على vw_fact_orders > New measure)
-=====================================================
+/* =====================================================
+   Power BI - DAX Measures (vw_fact_orders)
+   ===================================================== */
 
---- أساسية -------------------------------------------
+/* Core */
+Total Revenue     = SUM(vw_fact_orders[payment_total])
+Total Orders      = COUNTROWS(vw_fact_orders)
+Avg Order Value   = DIVIDE([Total Revenue], [Total Orders])
+Unique Customers  = DISTINCTCOUNT(vw_fact_orders[customer_unique_id])
 
-Total Revenue = SUM(vw_fact_orders[payment_total])
-
-Total Orders = COUNTROWS(vw_fact_orders)
-
-Avg Order Value = DIVIDE([Total Revenue], [Total Orders])
-
-Unique Customers = DISTINCTCOUNT(vw_fact_orders[customer_unique_id])
-
---- التوصيل ------------------------------------------
-
+/* Delivery & satisfaction */
 Avg Delivery Days = AVERAGE(vw_fact_orders[delivery_days])
-
+Avg Review Score  = AVERAGE(vw_fact_orders[review_score])
 Late Delivery % =
 DIVIDE(
     CALCULATE([Total Orders], vw_fact_orders[is_late] = 1),
     CALCULATE([Total Orders], vw_fact_orders[is_delivered] = 1)
 )
 
-Avg Review Score = AVERAGE(vw_fact_orders[review_score])
+/* Time intelligence (requires the Date table below) */
+Revenue PM    = CALCULATE([Total Revenue], DATEADD('Date'[Date], -1, MONTH))
+Revenue MoM % = DIVIDE([Total Revenue] - [Revenue PM], [Revenue PM])
+Revenue YTD   = TOTALYTD([Total Revenue], 'Date'[Date])
 
---- Time intelligence (محتاجة جدول Date تحت) ----------
-
-Revenue PM =
-CALCULATE([Total Revenue], DATEADD('Date'[Date], -1, MONTH))
-
-Revenue MoM % =
-DIVIDE([Total Revenue] - [Revenue PM], [Revenue PM])
-
-Revenue YTD =
-TOTALYTD([Total Revenue], 'Date'[Date])
-
-=====================================================
-جدول التاريخ (Date table)
-Modeling > New table → الصق ده:
-=====================================================
-
+/* =====================================================
+   Date table (Modeling > New table)
+   ===================================================== */
 Date =
 ADDCOLUMNS(
     CALENDAR(DATE(2016,9,1), DATE(2018,10,31)),
@@ -51,16 +35,8 @@ ADDCOLUMNS(
     "Weekday", FORMAT([Date], "ddd")
 )
 
-بعد إنشائه:
-1. Table view > حدد جدول Date > Table tools > Mark as date table > عمود [Date]
-2. Model view > اسحب Date[Date] فوق vw_fact_orders[order_date]  (علاقة 1:*)
-3. اسحب Date[Date] فوق vw_fact_order_items[order_date] كمان
-4. وعلاقة: vw_fact_orders[customer_unique_id] → vw_customer_rfm[customer_unique_id]
-5. مهم: حدد عمود Date[Month] > Column tools > Sort by column > Month Number
-   (عشان الشهور تترتب زمنياً مش أبجدياً)
-
-=====================================================
-تنسيق الـ measures (Format pane يمين):
-- Total Revenue, Avg Order Value → Currency أو Decimal + فاصلة آلاف
-- Late Delivery %, Revenue MoM % → Percentage بخانة عشرية
-=====================================================
+/* Model relationships:
+   Date[Date] 1--* vw_fact_orders[order_date]
+   Date[Date] 1--* vw_fact_order_items[order_date]
+   vw_fact_orders[customer_unique_id] *--1 vw_customer_rfm[customer_unique_id]
+   Sort Date[Month] by Date[Month Number]. */
