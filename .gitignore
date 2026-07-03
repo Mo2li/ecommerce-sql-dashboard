@@ -1,0 +1,17 @@
+# Raw data (120 MB — download from Kaggle instead)
+data/
+*.csv
+
+# Power BI temp / recovery
+*.tmp
+~$*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+Thumbs.db
+.DS_Store
